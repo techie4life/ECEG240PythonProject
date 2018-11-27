@@ -1,0 +1,54 @@
+'''ECEG 240 Project: Couplet Chain Solver'''
+
+
+def findWords(word1):
+
+    fp = open('words.txt', 'r')
+    words = fp.readlines()
+    fp.close()
+    wordsList = []
+    
+    for w in words:
+        w = w.strip()
+        if len(w) != len(word1):
+            continue
+        word_works = 0
+        for (idx,c) in enumerate(w):
+            if word1[idx] == '-':
+                continue
+            if c.lower() == (word1.lower())[idx]:
+                word_works += 1
+        if word_works == len(word1)-1:
+            wordsList.append(w)
+            
+    return wordsList
+
+
+
+def scoreWords(word1, word2):
+
+    possiblewords = findWords(word1)
+    scores = {}
+    
+    for w in possiblewords:
+        scores[w] = 0
+        for (idx,c) in enumerate(w):
+            if c.lower() == (word2.lower())[idx]:
+                scores[w] +=1
+                
+
+    return scores
+
+
+
+def chooseNext(word1, word2):
+
+    scoresd = scoreWords(word1, word2)
+    scorenums = list(scoresd.values())
+    maxscore = max(scorenums)
+
+    
+
+def main():
+    
+    pass
