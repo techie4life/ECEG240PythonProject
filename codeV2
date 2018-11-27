@@ -1,0 +1,76 @@
+'''ECEG 240 Project: Couplet Chain Solver'''
+
+
+def findWords(word1):
+
+    fp = open('words.txt', 'r')
+    words = fp.readlines()
+    fp.close()
+    wordsList = []
+    
+    for w in words:
+        w = w.strip()
+        if len(w) != len(word1):
+            continue
+        word_works = 0
+        for (idx,c) in enumerate(w):
+            if word1[idx] == '-':
+                continue
+            if c.lower() == (word1.lower())[idx]:
+                word_works += 1
+        if word_works == len(word1)-1:
+            wordsList.append(w)
+            
+    return wordsList
+
+
+
+def scoreWords(word1, word2):
+
+    possiblewords = findWords(word1)
+    scores = {}
+    
+    for w in possiblewords:
+        scores[w] = 0
+        for (idx,c) in enumerate(w):
+            if c.lower() == (word2.lower())[idx]:
+                scores[w] +=1
+                
+
+    return scores
+
+
+
+def chooseNext(word1, word2):
+
+    scoresd = scoreWords(word1, word2)
+    scorenums = list(scoresd.values())
+    maxscore = max(scoresd.values())
+    
+    maxwords = [k for k, v in scoresd.items() if v == maxscore]
+    choice = maxwords[0]
+
+    return choice
+    
+    
+    
+
+def main(word1, word2):
+  if len(word1) != len(word2):
+    return print("Please input words of equal length")
+  else:
+    couplet_chain = [word1]
+    choice = chooseNext(word1, word2)
+    counter = 0
+    while choice != word2:
+      choice = chooseNext(word1, word2)
+      couplet_chain.append(choice)
+      word1 = choice
+      counter = counter + 1
+      print(counter)
+      print(couplet_chain)
+      if counter >=1000: 
+        return print('no couplet chain could be found')
+        break
+    return print(couplet_chain)
+main('happy','megan')
