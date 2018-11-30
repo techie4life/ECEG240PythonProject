@@ -71,6 +71,9 @@ def main(word1, word2):
     
     if len(word1) != len(word2):
         return print("Please input words of equal length")
+    if word1.lower() == word2.lower():
+        couplet_chain = [word1]
+        return print(couplet_chain)
     else:
         couplet_chain = [word1]
         choice = chooseNext(word1, word2)
