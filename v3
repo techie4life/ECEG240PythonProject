@@ -1,7 +1,15 @@
 '''ECEG 240 Project: Couplet Chain Solver'''
 
 
+print("This program transforms one word into another by going through iterations of words that differ by only one letter at a time.")
 
+print("")
+
+start_word = input('Type in any word to start.')
+
+end_word = input('Type in a second word.')
+
+print("")
 
 def findWords(word1):
 
