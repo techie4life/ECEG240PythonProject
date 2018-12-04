@@ -1,0 +1,118 @@
+'''ECEG 240 Project: Couplet Chain Solver'''
+
+
+def findWords(word1):
+    '''this function finds any words that differ from word1 by only one letter
+        it returns a list
+        '''
+    fp = open('words.txt', 'r')
+    words = fp.readlines() #puts all lines into variable words
+    fp.close()
+    wordsList = [] #list of acceptable words
+
+    for w in words: #for every word in the list words (where all lines from words.txt are read to
+        w = w.strip() #strips newline character from each word
+        if len(w) != len(word1):
+            continue
+        word_works = 0
+        for (idx, c) in enumerate(w): #
+            if word1[idx] == '-':
+                continue
+            if c == (word1)[idx]:
+                word_works += 1
+        if word_works == (len(word1) - 1):
+            wordsList.append(w)
+
+    return wordsList
+
+def scoreWords(word1, word2):
+    '''this function scores the words in the list from findWords.
+        A higher score is given to words with more letters similar to word2
+        It returns a dictionary where keys are words and values are scores
+        '''
+    possiblewords = findWords(word1)
+    scores = {}
+
+    for w in possiblewords:
+        scores[w] = 0
+        for (idx, c) in enumerate(w):
+            if c.lower() == (word2.lower())[idx]:
+                scores[w] += 1
+
+    return scores
+
+def bestWords(word1, word2):
+    '''this function is the base of chooseNext
+        we used it for testing purposes
+        '''
+    scoresd = scoreWords(word1, word2)
+    scorenums = list(scoresd.values())
+    maxscore = max(scoresd.values())
+    maxwords = [k for k, v in scoresd.items() if v == maxscore]
+    return maxwords
+#print(bestWords('light', 'class'))
+
+def chooseNext(word1, word2):
+    '''this function chooses the next word in the couplet chain
+        it randomly chooses one of the maximum scoring words
+        '''
+    import random
+    scoresd = scoreWords(word1, word2)
+    scorenums = list(scoresd.values())
+    if scorenums == []:
+        choice = ('no couplet chain could be found')
+        print('no words were one letter off from',word1)
+        return choice
+    else:
+        maxscore = max(scoresd.values())
+        maxwords = [k for k, v in scoresd.items() if v == maxscore]
+        ri = random.randint(0,len(maxwords)-1)
+        choice = maxwords[ri]
+
+    return choice
+
+
+def main(word1, word2):
+    '''finds a couplet chain from word1 to word2, or tells if no couplet chain can be found'''
+    
+    if len(word1) != len(word2):
+        return print("Please input words of equal length")
+    if word1.lower() == word2.lower():
+        couplet_chain = [word1]
+        print(couplet_chain)
+        return(couplet_chain)
+    else:
+        couplet_chain = [word1]
+        choice = chooseNext(word1, word2)
+        if choice == ('no couplet chain could be found'):
+            print(choice)
+            return(choice)
+        counter = 0
+        if choice == word2:
+            couplet_chain.append(word2)
+        while choice != word2:
+            choice = chooseNext(word1, word2)
+            couplet_chain.append(choice)
+            word1 = choice
+            counter = counter + 1
+            if counter >= 100:
+                couplet_chain = ('no couplet chain could be found')
+                break
+    print(couplet_chain)
+    return couplet_chain
+#main('beds', 'nail')
+
+
+
+print("This program transforms one word into another by going through iterations of words that differ by only one letter at a time.")
+
+print("")
+
+start_word = input('Type in any word to start.')
+
+end_word = input('Type in a second word.')
+
+print("")
+
+main(start_word, end_word)
+
