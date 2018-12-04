@@ -40,7 +40,7 @@ def bestWords(word1, word2):
     maxscore = max(scoresd.values())
     maxwords = [k for k, v in scoresd.items() if v == maxscore]
     return maxwords
-print(bestWords('banda','hands'))
+#print(bestWords('banda','hands'))
 
 
 def chooseNext(word1, word2):
